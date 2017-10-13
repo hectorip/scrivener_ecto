@@ -18,6 +18,16 @@ defimpl Scrivener.Paginater, for: Ecto.Query do
     }
   end
 
+  @spec paginate_simple(Ecto.Query.t, Scrivener.Config.t) :: Scrivener.Page.t
+  def paginate_simple(query, %Config{page_size: page_size, page_number: page_number, module: repo, caller: caller}) do
+
+    %Page{
+      page_size: page_size,
+      page_number: page_number,
+      entries: entries(query, repo, page_number, page_size, caller)
+    }
+  end
+
   defp entries(query, repo, page_number, page_size, caller) do
     offset = page_size * (page_number - 1)
 
